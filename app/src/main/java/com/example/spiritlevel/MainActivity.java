@@ -19,12 +19,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         List<Sensor> deviceSensors = sensorManager.getSensorList(Sensor.TYPE_ALL);
         for (Sensor sensor : deviceSensors) {
             Log.i("MainActivity", sensor.getName());
         }
         mGravity = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+        spiritLevelView = findViewById(R.id.spiritView);
     }
 
     @Override
@@ -34,20 +36,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public final void onSensorChanged(SensorEvent event) {
-        int width = spiritLevelView.getWidth();
-        int height = spiritLevelView.getHeight();
-        // The light sensor returns a single value.
-        // Many sensors return 3 values, one for each axis.
-        // Do something with this sensor value.
+        // Logs percentage of x, y, z
         Log.i("MainActivity", String.format("x: %.2f%%, y: %.2f%%, z: %.2f%%",
-                (event.values[0]-(-9.81))/(9.81-(-9.81))*100,
                 (event.values[1]-(-9.81))/(9.81-(-9.81))*100,
+                (event.values[0]-(-9.81))/(9.81-(-9.81))*100,
                 (event.values[2]-(-9.81))/(9.81-(-9.81))*100));
 
-        spiritLevelView.moveCircle((int)(event.values[0]-(-9.81)/(9.81-(-9.81))*width),
-                (int)(event.values[1]-(-9.81)/(9.81-(-9.81))*height));
+        spiritLevelView.moveCircle(
+                (int)(((event.values[0] - (-9.81)) / (9.81 - (-9.81))) * (spiritLevelView.getHeight())),
+                (int)(((event.values[1] - (-9.81)) / (9.81 - (-9.81))) * (spiritLevelView.getWidth())));
         spiritLevelView.invalidate();
-
     }
 
     @Override

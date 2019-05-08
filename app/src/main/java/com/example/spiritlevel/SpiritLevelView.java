@@ -20,7 +20,7 @@ public class SpiritLevelView extends View {
     private void drawCircle(Canvas canvas) {
         Paint paint = new Paint();
         paint.setColor(Color.WHITE);
-        canvas.drawCircle(x, y, 1 , paint);
+        canvas.drawCircle(x, y, 40, paint);
     }
 
     public void moveCircle(int x, int y) {
